@@ -1,0 +1,22 @@
+anytown_version: 0
+excluded_nodes:
+- '40'
+- '41'
+- '42'
+full_objective: 0.7272727272727273
+network_file: ../Data/Anytown/anytown.inp
+optimizer_params:
+  max_pump_speed: 5
+  maxiter: 600
+  method: Powell
+pressure_objective: 0.7272727272727273
+pump_efficiency_objective: 0.27931216288130384
+pump_speeds:
+  '78': 1.1804794059695265
+  '79': 1.1804794059695265
+  '80': 2.307079490797186
+tank_objective: 0.7372181827853094
+weights:
+  abs_tank_flow: 0.0
+  pressure_violation: 1.0
+  pump_efficiency: 0.0

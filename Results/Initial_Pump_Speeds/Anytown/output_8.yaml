@@ -1,0 +1,27 @@
+excluded_nodes:
+- '10'
+- '65'
+- '165'
+- '265'
+full_objective: 0.467841762540703
+initial_tank_levels:
+  '165': 66.93
+  '265': 66.93
+  '65': 66.93
+network_file: ../Data/Anytown/ATM.inp
+optimizer_params:
+  max_pump_speed: 5
+  maxiter: 600
+  method: Powell
+  n_runs: 20
+pressure_objective: 1.0
+pump_efficiency_objective: 0.6630196841758857
+pump_speeds:
+  b1: 0.9038811079161312
+  b2: 0.6211504593233291
+  b3: 0.9038818857512253
+tank_objective: 0.7400093903316054
+weights:
+  abs_tank_flow: 0.02
+  pressure_violation: 0.9
+  pump_efficiency: 0.08

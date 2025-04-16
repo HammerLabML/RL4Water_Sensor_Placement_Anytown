@@ -1,0 +1,19 @@
+anytown_version: 0
+excluded_nodes: []
+full_objective: 0.5896
+network_file: ../Data/Anytown/anytown.inp
+optimizer_params:
+  max_pump_speed: 5
+  maxiter: 600
+  method: Nelder-Mead
+pressure_objective: 0.56
+pump_efficiency_objective: 0.9034
+pump_speeds:
+    '78': 2.4867
+    '79': 2.4867
+    '80': 2.4867
+tank_objective: 0.6658
+weights:
+  abs_tank_flow: 0.02
+  pressure_violation: 0.9
+  pump_efficiency: 0.08

@@ -1,0 +1,13 @@
+argparse>=1.1
+gymnasium>=1.0.0,<1.0
+matplotlib>=3.9.1
+numpy>=2.1.2
+pandas>=2.2.3
+pyyaml>=6.0.1
+python>=3.10
+scipy>=1.14.0
+stable_baselines3>=2.6.0a0
+rl_zoo3>=2.4.0
+torch>=2.4.0
+epyt_flow>=0.10.0
+tensorboard>=2.18.0

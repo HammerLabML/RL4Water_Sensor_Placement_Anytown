@@ -1,0 +1,56 @@
+
+
+We formulate the reward as a weighted sum of two partial rewards
+\begin{align*}
+r &= c_1 \cdot r_{\text{pres}} + c_2  \cdot r_{\text{energy}} &   \text{s.t.} \quad \ c_1 + c_2 &=
+1,\ c_1, c_2 > 0 \\
+r_{\text{pres}} &= \frac{1}{N} \sum_{n=1}^N \mathbb{I}(h_{min} <
+h[n] < h_{max}) &    r_{\text{energy}} &= 1 - \sum_{p=1}^P \frac{E(p)}{E_{max}(p)}.
+\end{align*}
+Here, $r_{\text{pres}}$ as in \cite{hajgato_deep_2020} measures the agent's
+ability to satisfy pressure constraints at consumer nodes, 
+where $\mathbb{I}$ is the indicator function, $h[n]$ is the pressure at node
+$n$ and $h_{min}, h_{max}$ are lower and upper pressure constraints,
+respectively.
+The second term, $r_{\text{energy}}$, reflects the energy consumption of the
+pumps, where $E(p)$ is the energy consumption of pump $p$ and $E_{max}(p)$ is its
+maximum energy consumption, determined empirically before optimization.
+To ensure constraint satisfaction, we used weights of $c_1=0.9$ and
+$c_2=0.1$ throughout the experiments. The action of the agent is a vector of
+relative speed settings, ranging from 0 to 1 for each pump in the network. To investigate the effects on performance, we trained the agent with different sensory information in the current state. The configurations used are described
+in Tab.~\ref{tab:state_acronyms}
+\begin{table}[htb]
+\centering
+\begin{tabular}{l|c|c|c|c|c}
+    \textbf{Acronym} & \textbf{Tank-Level} & \textbf{Daytime} & \textbf{Pressure} & \textbf{Flow} & \textbf{Energy Consumption}\\
+    \hline
+    TD & \cmark & \cmark & \xmark & \xmark & \xmark \\
+    TP(A) & \cmark & \xmark & all nodes & \xmark & \xmark \\
+    TDP(A) & \cmark & \cmark & all nodes & \xmark & \xmark \\
+    TDP(1) & \cmark & \cmark & one random node & \xmark & \xmark \\
+    TDP(8) & \cmark & \cmark & eight random nodes & \xmark & \xmark \\
+    TDP(A)FE & \cmark & \cmark & all nodes & \cmark & \cmark
+\end{tabular}
+\caption{Acronyms of different state representations used during training}
+\label{tab:state_acronyms}
+\end{table}
+To conduct our experiments, we used the SAC implementation of Stable Baselines
+3 \cite{raffin_stable_2021} with default hyperparameters with the following exceptions: 
+We increased the learning rate to $3 \cdot 10^{-3}$ and fixed the entropy
+coefficient to $10^{-2}$.
+For our case study, we used a variant of the Anytown network
+\cite{walski_battle_1987} as used in
+\cite{reis_cost-efficient_2024}. The network contains three pumps connected to the reservoir, which supplies water to 19 junctions, connected by 42 pipes. Three
+storage tanks are installed as water buffers. The network file and our code
+are publicly available\footnote{Link to code and data on GitHub:
+\href{https://github.com/HammerLabML/RL4Water\_Sensor\_Placement\_Anytown}{https://github.com/HammerLabML/RL4Water\_Sensor\_Placement\_Anytown}}.
+Following the general guidelines for pressure constraints in water networks
+\cite{ghorbanian_pressure_2016}, we used a lower pressure constraint of 28.12m and an upper constraint of 70m. We utilized the EPANET simulator
+\cite{rossman_epanet_2020} through the EPyT-Flow Python library
+\cite{artelt_epyt-flow_2024}. Experiments used a 30min
+time step for a duration of 24 hours. Due to stochasticity in the training
+process, we repeated each training run five times using different seeds and averaged the results. This includes different sensor placements for the random locations. To
+test the agent's ability to generalize to unseen scenarios, we added 5\% of
+uncertainty to the demand pattern at each node. To account for this
+uncertainty, the results reported below in Table~\ref{tab:rewards} were
+additionally averaged over ten 24-hour episodes.

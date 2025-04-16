@@ -1,0 +1,3 @@
+weights:
+    pressure_violation: 0.9
+    pump_price: 0.1

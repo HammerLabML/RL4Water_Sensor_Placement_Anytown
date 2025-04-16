@@ -1,0 +1,297 @@
+---
+
+name: "DEFAULT"   # MUST BE DEFAULT
+# must be relative to this YAML file
+import_path: "../default.yaml"
+
+params:
+
+  train: True
+  analyze_agent: True
+
+  algorithm:
+    name: 'SAC'
+    policy: 'MlpPolicy'
+    gamma: 0.99
+    learning_rate: 3e-4
+    batch_size: 256
+    tau: 5e-3
+    ent_coef: 'auto'
+
+  env:
+    env_id: 'ATM_env'
+    max_pump_speed: 1
+    min_pump_speed: 0
+    wrapper:
+      # wrapper_names: ['add_previous_obs','make_speed_aware','add_time_limit','make_time_aware', 'normalize_hydraulics','rescale_action']
+      wrapper_names: ['add_previous_obs', 'normalize_hydraulics','rescale_action']
+    # must be relative to working directory
+    objective_weights_file: '../Data/Parameters_for_Optimization/objective_weights_5.yaml'
+    n_envs: 8
+    # must be relative to working directory
+    model_uncertainty_file: '../Data/Model_Uncertainties/uncertainty_1.json'
+
+
+---
+name: atm_test
+repetitions: 1
+iterations: 150
+reps_per_job: 1
+reps_in_parallel: 1 # need to be 1 in order for wandb to work properly
+# must be relative to working directory
+path: '../Results/Uncertain_Demands/Anytown'
+
+params:
+  env:
+    env_id: 'ATM_env'
+    version: 4
+    n_envs: 1
+    wrapper:
+      wrapper_names: ['pressure_sensors','time_of_day', 'weekday', 'normalize_hydraulics','rescale_action']
+
+
+---
+name: atm_only_tank
+repetitions: 5
+iterations: 100_000
+reps_per_job: 1
+reps_in_parallel: 1 # need to be 1 in order for wandb to work properly
+# must be relative to working directory
+path: '../Results/Uncertain_Demands/Anytown'
+
+params:
+  train: False
+  algorithm:
+    ent_coef: 0.01
+    learning_rate: 3e-3
+    path: 'self'
+  env:
+    env_id: 'ATM_env'
+    version: 4
+    n_envs: 8
+    wrapper:
+      wrapper_names: ['pressure_sensors','time_of_day', 'normalize_hydraulics','rescale_action']
+      obs_filter: ['flow','pump','press']
+
+---
+name: atm_sensors
+repetitions: 5
+iterations: 100_000
+reps_per_job: 1
+reps_in_parallel: 1 # need to be 1 in order for wandb to work properly
+# must be relative to working directory
+path: '../Results/Uncertain_Demands/Anytown'
+
+params:
+  train: False
+  algorithm:
+    ent_coef: 0.01
+    learning_rate: 3e-3
+    path: 'self'
+  env:
+    env_id: 'ATM_env'
+    version: 4
+    n_envs: 8
+    wrapper:
+      wrapper_names: ['pressure_sensors','time_of_day', 'normalize_hydraulics','rescale_action']
+list:
+  env:
+    wrapper:
+      sensor_file: ['../Data/Anytown/sensor_placement_random_1_sensors.npy','../Data/Anytown/sensor_placement_random_8_sensors.npy']#,'../Data/Anytown/sensor_placement_random_2_sensors.npy','../Data/Anytown/sensor_placement_random_4_sensors.npy']
+
+
+---
+name: atm_all_press
+repetitions: 5
+iterations: 100_000
+reps_per_job: 1
+reps_in_parallel: 1 # need to be 1 in order for wandb to work properly
+# must be relative to working directory
+path: '../Results/Uncertain_Demands/Anytown'
+
+params:
+  train: False
+  algorithm:
+    ent_coef: 0.01
+    learning_rate: 3e-3
+    path: 'self'
+  env:
+    env_id: 'ATM_env'
+    version: 4
+    n_envs: 8
+    wrapper:
+      wrapper_names: [ 'pressure_sensors','time_of_day', 'normalize_hydraulics','rescale_action' ]
+      obs_filter: ['flow','pump']
+
+---
+name: atm_all_obs
+repetitions: 5
+iterations: 100_000
+reps_per_job: 1
+reps_in_parallel: 1 # need to be 1 in order for wandb to work properly
+# must be relative to working directory
+path: '../Results/Uncertain_Demands/Anytown'
+
+params:
+  train: False
+  algorithm:
+    ent_coef: 0.01
+    learning_rate: 3e-3
+    path: 'self'
+  env:
+    env_id: 'ATM_env'
+    version: 4
+    n_envs: 8
+    wrapper:
+      wrapper_names: ['time_of_day', 'normalize_hydraulics','rescale_action' ]
+
+---
+name: atm_all_obs_hyd_pen
+repetitions: 5
+iterations: 100_000
+reps_per_job: 1
+reps_in_parallel: 1 # need to be 1 in order for wandb to work properly
+# must be relative to working directory
+path: '../Results/Uncertain_Demands/Anytown'
+
+params:
+  train: False
+  algorithm:
+    ent_coef: 0.01
+    learning_rate: 3e-3
+    path: 'self'
+  env:
+    env_id: 'ATM_env'
+    version: 4
+    n_envs: 8
+    objective_weights_file: '../Data/Parameters_for_Optimization/objective_weights_7.yaml'
+    wrapper:
+      wrapper_names: ['time_of_day', 'normalize_hydraulics','rescale_action' ]
+  logging:
+    reward_columns: [ "pressure_obj", "pump_price_obj", "hydraulically_unstable" ]
+
+---
+name: atm_all_obs_smooth_hyd_pen
+repetitions: 5
+iterations: 100_000
+reps_per_job: 1
+reps_in_parallel: 1 # need to be 1 in order for wandb to work properly
+# must be relative to working directory
+path: '../Results/Uncertain_Demands/Anytown'
+
+params:
+  train: False
+  algorithm:
+    ent_coef: 0.01
+    learning_rate: 3e-3
+    path: 'self'
+  env:
+    env_id: 'ATM_env'
+    version: 4
+    n_envs: 8
+    objective_weights_file: '../Data/Parameters_for_Optimization/objective_weights_8.yaml'
+    wrapper:
+      wrapper_names: ['time_of_day', 'normalize_hydraulics','rescale_action' ]
+  logging:
+    reward_columns: [ "pressure_obj", "pump_price_obj", "hydraulically_unstable","smoothness_obj" ]
+
+
+---
+name: atm_all_obs_smooth_curve
+repetitions: 5
+iterations: 100_000
+reps_per_job: 1
+reps_in_parallel: 1 # need to be 1 in order for wandb to work properly
+# must be relative to working directory
+path: '../Results/Uncertain_Demands/Anytown'
+
+params:
+  train: False
+  algorithm:
+    ent_coef: 0.01
+    learning_rate: 3e-3
+    path: 'self'
+  env:
+    env_id: 'ATM_env'
+    version: 4
+    n_envs: 8
+    objective_weights_file: '../Data/Parameters_for_Optimization/objective_weights_9.yaml'
+    wrapper:
+      wrapper_names: ['time_of_day', 'normalize_hydraulics','rescale_action' ]
+  logging:
+    reward_columns: [ "pressure_obj", "pump_price_obj", "smoothness_obj" ]
+
+
+---
+name: atm_all_obs_smooth_hyd_speed
+repetitions: 5
+iterations: 100_000
+reps_per_job: 1
+reps_in_parallel: 1 # need to be 1 in order for wandb to work properly
+# must be relative to working directory
+path: '../Results/Uncertain_Demands/Anytown'
+
+params:
+  train: False
+  algorithm:
+    ent_coef: 0.01
+    learning_rate: 3e-3
+    path: 'self'
+  env:
+    env_id: 'ATM_env'
+    version: 4
+    n_envs: 8
+    objective_weights_file: '../Data/Parameters_for_Optimization/objective_weights_8.yaml'
+    wrapper:
+      wrapper_names: ['time_of_day', 'make_speed_aware', 'normalize_hydraulics','rescale_action' ]
+  logging:
+    reward_columns: [ "pressure_obj", "pump_price_obj", "hydraulically_unstable","smoothness_obj" ]
+
+
+---
+name: atm_all_obs_smooth_speed
+repetitions: 5
+iterations: 100_000
+reps_per_job: 1
+reps_in_parallel: 1 # need to be 1 in order for wandb to work properly
+# must be relative to working directory
+path: '../Results/Uncertain_Demands/Anytown'
+
+params:
+  train: False
+  algorithm:
+    ent_coef: 0.01
+    learning_rate: 3e-3
+    path: 'self'
+  env:
+    env_id: 'ATM_env'
+    version: 4
+    n_envs: 8
+    objective_weights_file: '../Data/Parameters_for_Optimization/objective_weights_9.yaml'
+    wrapper:
+      wrapper_names: ['time_of_day', 'make_speed_aware', 'normalize_hydraulics','rescale_action' ]
+  logging:
+    reward_columns: [ "pressure_obj", "pump_price_obj", "smoothness_obj" ]
+
+---
+name: atm_no_time_no_flow
+repetitions: 5
+iterations: 100_000
+reps_per_job: 1
+reps_in_parallel: 1 # need to be 1 in order for wandb to work properly
+# must be relative to working directory
+path: '../Results/Uncertain_Demands/Anytown'
+
+params:
+  train: False
+  algorithm:
+    ent_coef: 0.01
+    learning_rate: 3e-3
+    path: 'self'
+  env:
+    env_id: 'ATM_env'
+    version: 4
+    n_envs: 8
+    wrapper:
+      wrapper_names: [ 'pressure_sensors', 'normalize_hydraulics','rescale_action' ]
+      obs_filter: ['flow','pump']

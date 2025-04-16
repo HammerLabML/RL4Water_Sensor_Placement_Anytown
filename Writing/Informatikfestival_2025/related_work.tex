@@ -1,0 +1,43 @@
+The operation of pumps in WDNs has been optimized for several decades with
+varying techniques and objectives \cite{mala-jetmarova_lost_2017}. A common theme of
+existing approaches is the goal of reducing the energy cost of pumping. In
+addition, several other constraints and objectives have been treated in the
+literature, ranging from pressure bounds at consumer nodes
+\cite{hajgato_deep_2020} over control of tank levels \cite{baran_multi-objective_2005} to robustness against leakage events
+\cite{giustolisi_operational_2013}.
+Traditional methods optimize a fixed pump schedule for a certain
+period of time based on a computational model of the WDN and assumptions
+on consumer demands \cite{ostfeld_ant_2008}. More recent methods aim to dynamically
+adapt the schedule to the current state of the network
+\cite{pei_real-time_2025}. RL is particularly promising for this
+direction of research, as it models the pump scheduler as an agent in a dynamic
+environment, deciding on the next action to apply based on current observations
+of the network.
+Previous approaches included tabular Q-learning \cite{candelieri_intelligent_2019}, usage of deep networks \cite{hajgato_deep_2020,ma_pump_2024} and scheduling of valves in large distribution networks under uncertainty \cite{belfadil_drl-epanet_2022}.
+% A pioneering work by Candelieri \etal \cite{candelieri_intelligent_2019}
+% applied tabular Q-Learning \cite{watkins_q-learning_1992}. Following
+% approaches used deep networks as function approximators, enhancing the
+% scalability to larger networks and more complex observations
+% \cite{hajgato_deep_2020,ma_pump_2024}. Belfadil \etal successfully employed RL
+% for scheduling of valves in large WDNs under uncertainty
+% \cite{belfadil_drl-epanet_2022}.
+However, most of the existing literature on
+pump control assumes deterministic demands or knowledge of the demand pattern
+by the agent. To address a more realistic use case, we evaluate the
+performance of the agent under uncertainty. Our goal is to minimize the price
+for pumping energy while making sure that the pressure at consumer nodes in
+the network stays within acceptable bounds.
+
+The work most closely related to ours is a very recent publication by Pei
+\etal \cite{pei_real-time_2025}. The authors optimize an objective similar to
+ours taking demand uncertainty into account. The
+observations they provide to the agent differ throughout their experiments: In
+one setup they assume very limited information comprised only of tank levels
+and pump status, while in another they assume knowledge of demand forecasts
+for every node in the network. We argue that the former underestimates
+available information as knowledge from sensors distributed across the network
+is not included while the latter might be an overestimation as demand information may not be available or reliable in the real world. %in cases where
+%demand forecasts are only available for a subset of nodes, or the forecasting
+%model is not reliable.
+In order to further improve the practical use of RL for
+pump scheduling, we conduct an in-depth analysis of the benefit of different observation types and different amounts of pressure sensors.

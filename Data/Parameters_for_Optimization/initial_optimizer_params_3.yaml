@@ -1,0 +1,4 @@
+method: 'Powell'
+max_pump_speed: 5
+maxiter: 600
+n_runs: 20

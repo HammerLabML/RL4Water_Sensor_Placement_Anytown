@@ -1,0 +1,71 @@
+% !TeX encoding = UTF-8
+% !TeX program = pdflatex
+% !BIB program = biber
+
+
+
+\documentclass[english]{lni}
+\usepackage{wrapfig}
+\addbibresource{festival_paper.bib}
+\usepackage{pifont}% http://ctan.org/pkg/pifont
+\newcommand{\cmark}{\ding{51}}%
+\newcommand{\xmark}{\ding{55}}%
+\begin{document}
+%%% Mehrere Autoren werden durch \and voneinander getrennt.
+%%% Die Fußnote enthält die Adresse sowie eine E-Mail-Adresse.
+%%% Das optionale Argument (sofern angegeben) wird für die Kopfzeile verwendet.
+\title[To Pump or Not to Pump]{To Pump or Not to Pump - Sensor-based Reinforcement
+Learning for an Optimal Scheduler}
+%% \subtitle{Untertitel / Subtitle} % if needed
+\author[1]{Alissa Müller}{almueller@techfak.uni-bielefeld.de}{0009-0009-3731-8665}
+\author[1]{Paul Stahlhofen}{pstahlhofen@techfak.uni-bielefeld.de}{0009-0004-7187-4992}
+\author[1]{Barbara Hammer}{bhammer@techfak.uni-bielefeld.de}{0000-0002-0935-5591
+}
+\affil[1]{Universität Bielefeld\\AG Machine Learning\\Inspiration 1\\33615
+Bielefeld\\Deutschland}
+\maketitle
+
+\begin{abstract}
+Reinforcement Learning can be a powerful tool for Pump Scheduling in Water
+Distribution Networks. In comparison to classic optimization it can adapt to
+unseen situations and find optimal schedules in real-time.
+In this paper, we consider the optimization of energy efficiency under a
+pressure constraint. For this purpose, we investigate the effects of different sensory information on the learned scheduling policy.
+We find that information on pressure, tank levels, daytime, flows and pump energy consumption all boost the performance of the agent.
+However, sparse pressure readings seem to be sufficient at least in small networks.
+\end{abstract}
+\begin{keywords}
+Pump Scheduling \and Water Distribution Networks \and Reinforcement Learning
+\end{keywords}
+%%% Beginn des Artikeltexts
+\section{Introduction}
+\label{sec:Introduction}
+% telling which problem is addressed by this work and why it's relevant
+\input{motivation.tex}
+\subsection{Foundations}
+\label{sec:foundations}
+% mathematical problem formulation for the pump scheduling task
+% brief introduction into RL ans SAC
+%
+% maybe, a schematic plot of how the agent receives sensor data to
+% operate the pump would be good.
+\input{foundations.tex}
+\subsection{Related Work}
+\label{sec:related_work}
+\input{related_work.tex}
+\section{Case Study: Pump Scheduling for Anytown}
+\label{sec:experimental_setup}
+% info about Net3 and about sensor placement
+% and wrappers should go here
+\input{experimental_setup.tex}
+\section{Results and Discussion}
+\label{sec:results_and_discussion}
+\input{results_and_discussion.tex}
+\section{Conclusion}
+\label{sec:conclusion}
+\input{conclusion.tex}
+\section{Acknowledgments}
+\label{sec:acknowledgments}
+\input{acknowledgements.tex}
+\printbibliography
+\end{document}

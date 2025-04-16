@@ -1,0 +1,5 @@
+weights:
+    pressure_violation: 0.8
+    abs_tank_flow: 0.02
+    pump_efficiency: 0.08
+    speed_smoothness: 0.1

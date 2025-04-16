@@ -1,0 +1,25 @@
+The successful operation of pumps in Water Distribution Networks (WDNs) constitutes a crucial task for water utilities, as failures
+can have catastrophic consequences \cite{mckee_review_2011}.
+At the same time, the operational cost of pumping is the largest component in the expense of
+water operators worldwide \cite{mala-jetmarova_lost_2017}. Various methods
+have been proposed for the optimization of pump scheduling, minimizing cost
+while adhering to operational constraints
+\cite{baran_multi-objective_2005,ostfeld_ant_2008,reis_cost-efficient_2024}.
+As an increasing amount of data is monitored in WDNs by Sensory Control and
+Data Acquisition (SCADA) systems, a data-driven control through Reinforcement
+Learning \cite{sutton_reinforcement_2018} becomes a promising goal for water
+network research. In this paper we train a Reinforcement Learning (RL) agent
+to minimize the operational cost of pumping while ensuring that the pressure
+at all consumer nodes in the network stays within a satisfactory range.
+The main focus of this work is on the effect of different types of
+sensory input on the performance of the learned pump scheduler.
+For that purpose, we employ the Soft Actor Critic algorithm \cite{haarnoja_soft_2018}
+to the Anytown benchmark
+\cite{walski_battle_1987} and test its ability to generalize its policy to uncertain demand scenarios.
+
+The rest of the paper is organized as follows: Section~\ref{sec:foundations}
+introduces the basic idea of RL as well as the Soft Actor Critic algorithm.
+Section~\ref{sec:related_work} discusses related work. In Section~\ref{sec:experimental_setup}, we formalize the optimization problem in an RL
+framework and describe our experimental setup. Results are discussed in
+Section~\ref{sec:results_and_discussion}, before concluding with a brief
+summary in Section~\ref{sec:conclusion}.

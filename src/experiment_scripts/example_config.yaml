@@ -1,0 +1,20 @@
+name: 'DEFAULT'
+path: '.'
+repetitions: 1
+reps_per_job: 1
+reps_in_parallel: 1
+iterations: 1
+params:
+    a:
+        b: 2
+        c: 7
+
+---
+name: 'example_config'
+params:
+    a:
+        c: 1
+list:
+    a:
+        b: [4,5,6]
+

@@ -1,0 +1,3 @@
+method: 'Nelder-Mead'
+max_pump_speed: 5
+maxiter: 600

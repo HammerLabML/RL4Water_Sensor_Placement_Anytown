@@ -1,0 +1,4 @@
+weights:
+    pressure_violation: 0.85
+    pump_price: 0.1
+    speed_smoothness: 0.05
