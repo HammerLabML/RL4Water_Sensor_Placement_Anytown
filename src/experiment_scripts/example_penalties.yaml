@@ -1,6 +1,0 @@
-weights:
-    pressure_violation: 0.7
-    speed_smoothness: 0.3
-penalties:
-    pressure_violation: 0.5
-    speed_change: 0.3
