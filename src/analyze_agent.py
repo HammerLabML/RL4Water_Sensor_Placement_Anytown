@@ -189,6 +189,19 @@ class AgentAnalyzer():
         return tuple(pandas_objects)
 
     def record_venv_obs(self, obs_df, obs, time, denormalize_obs=True):
+        """
+        Reconstruct the original observation of a wrapped vectorized environment.
+
+        The following assumptions are made:
+        - In case the vec_env is wrapped with VecFrameStack and VecNormalize,
+          it is FIRST wrapped with VecFrameStack and then with VecNormalize.
+          This is counterintuitive and has the sole reason that stable_baselines3
+          would throw an error for the other ordering of wrappers
+        - In case the inner envs are wrapped with FrameStackObservation and
+          NormalizeHydraulics, they must be wrapped with NormalizeHydraulics
+          first.
+        - Inner envs must no be wrapped with NormalizeObservation
+        """
         if gym_util.is_wrapped_with(self._env, VecNormalize) and denormalize_obs:
             obs = self._env.get_original_obs()[0]
         if gym_util.is_wrapped_with(self._env, VecFrameStack):
@@ -381,6 +394,22 @@ class AgentAnalyzer():
             plt.show()
 
     def compare_test_episodes(self, num_trials=10, output_file=None):
+        """
+        Run multiple episodes and collect the results. This is usefule for
+        environments with model uncertainty.
+
+        @param num_trials, int, default=10, number of episodes
+        @param output_file, default=None, file to plot results to
+        @returns
+            - all_rewards_df, a pd.DataFrame indexed by timesteps with trials
+              (format Trial-<i>) as columns, containing the weighted rewards 
+            - energyconsumption_df, a pd.DataFrame with the same index and
+              columns as all_rewards_df, containing the total energyconsumption
+        The plot written to output_file (or shown if output_file=None) contains
+        two subplots:
+          1. Pump speeds over time. CAUTION: Only from the last trial
+          2. Rewards over time, averaged oer trials with standard deviation displayed
+        """
         all_rewards = []
         all_obs = []
         for i in range(num_trials):
@@ -410,6 +439,7 @@ class AgentAnalyzer():
         return all_rewards_df, energyconsumption_df
 
 def plot_training_rewards(log_file, output_file=None):
+    '''Deprecated. Using TensorBoard is easier.'''
     log = pd.read_csv(log_file)
     rewards = log['rollout/ep_rew_mean']
     timesteps = log['time/total_timesteps']

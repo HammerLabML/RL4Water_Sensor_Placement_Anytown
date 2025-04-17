@@ -11,6 +11,14 @@ from objective_calculator import NetworkConstraints
 from pump_control_envs import ContinuousPumpControlEnv
 
 class NormalizeHydraulics(ObservationWrapper):
+    """
+    Normalize observations based on the type of sensor they come from
+
+    @param: env, gymnasium.Env or stable_baselines3.vec_env.VecEnv
+    env must be a ContinuousPumpControlEnv or comprised of those.
+    env.objective_calculator.network_constraints should contain max_abs_flows
+    and max_pump_prices to enable normalization of flow and energy consumption
+    """
 
     def __init__(self, env):
         if not isinstance(env.unwrapped, ContinuousPumpControlEnv):
@@ -83,6 +91,21 @@ class NormalizeHydraulics(ObservationWrapper):
             
 
     def observation(self, obs):
+        """
+        Three quantities of the observation are normalized as follows:
+        - pressure readings are linearly rescaled such that the lower pressure
+          bound is mapped to zero and the upper pressure bound is mapped to
+          one.
+        - flow measurements are rescaled such that the largest absolute flow is
+          mapped to one in positive direction or -1 in negative direction. Note
+          that the maximum absolut flow is typically determined empirically, so
+          it's not guaranteed to be correct.
+        - energy consumption measurements are divided by the maximum possible
+          energy consuption. Again, this maximum is typically determined
+          empirically, so there is no guarantee for its correctness.
+
+        @param obs, numpy.ndarray, original observations produced by the environment
+        """
         observation_desc = self.get_wrapper_attr('observation_desc')
         obs = pd.Series(dict(zip(observation_desc, obs, strict=True)))
         flow_idxs = self.nonzero_max_abs_flows.index
@@ -113,6 +136,15 @@ class NormalizeHydraulics(ObservationWrapper):
         return obs
 
     def denormalize(self, normalized_obs, observation_desc=None):
+        """
+        Retrieve the original observation from an observation that was normalized with this wrapper.
+
+        @param normalized_obs, numpy.ndarray, the normalized observation
+        @param observation_desc, dict, default=None
+        If necessary, a different observation description can be provided here.
+        This can come in handy if other wrappers have been applied in addition
+        to this one which changed the observation description.
+        """
         if observation_desc is None:
             observation_desc = self.get_wrapper_attr('observation_desc')
         len_observation_desc = len(observation_desc)
